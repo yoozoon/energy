@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Consumption Tracker</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .icon-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-tachometer-alt text-3xl"></i>
+                    <h1 class="text-2xl font-bold">Utility Consumption Tracker</h1>
+                </div>
+                <nav class="flex space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="/dashboard" class="hover:text-blue-200 transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <!-- Page Title -->
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-3">Submit Meter Readings</h2>
+                <p class="text-gray-600">Enter your current energy and water meter readings to track consumption patterns</p>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="successMessage" class="hidden mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center">
+                <i class="fas fa-check-circle mr-3 text-green-500"></i>
+                <div>
+                    <p class="font-semibold">Success!</p>
+                    <p>Your meter reading has been submitted successfully.</p>
+                </div>
+            </div>
+            
+            <div id="errorMessage" class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center">
+                <i class="fas fa-exclamation-circle mr-3 text-red-500"></i>
+                <div>
+                    <p class="font-semibold">Error!</p>
+                    <p>There was an error submitting your reading. Please try again.</p>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white rounded-xl card-shadow p-8">
+                <form id="meterForm" onsubmit="submitReading(event)">
+                    <!-- Date Field -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2 flex items-center">
+                            <i class="fas fa-calendar-alt icon-gradient mr-2"></i>
+                            Reading Date
+                        </label>
+                        <input
+                            type="date"
+                            name="date"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus"
+                        />
+                    </div>
+
+                    <!-- Energy Meters Section -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-bolt icon-gradient mr-2"></i>
+                            Energy Meters (kWh)
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Energy Meter 1 -->
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <i class="fas fa-plug text-yellow-500 mr-2"></i>
+                                    Energy Meter 1
+                                </label>
+                                <input
+                                    type="number"
+                                    name="energyMeter1"
+                                    step="0.01"
+                                    min="0"
+                                    required
+                                    placeholder="0.00"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus"
+                                />
+                            </div>
+
+                            <!-- Energy Meter 2 -->
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <i class="fas fa-plug text-yellow-500 mr-2"></i>
+                                    Energy Meter 2
+                                </label>
+                                <input
+                                    type="number"
+                                    name="energyMeter2"
+                                    step="0.01"
+                                    min="0"
+                                    required
+                                    placeholder="0.00"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Water Meter Section -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-tint icon-gradient mr-2"></i>
+                            Water Meter (Liters)
+                        </h3>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 flex items-center">
+                                <i class="fas fa-water text-blue-500 mr-2"></i>
+                                Water Consumption
+                            </label>
+                            <input
+                                type="number"
+                                name="waterMeter"
+                                step="0.01"
+                                min="0"
+                                required
+                                placeholder="0.00"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Optional Fields -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-info-circle icon-gradient mr-2"></i>
+                            Additional Information (Optional)
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Location -->
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                    Location
+                                </label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    placeholder="e.g., Main Building, House A"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus"
+                                />
+                            </div>
+
+                            <!-- Notes -->
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2 flex items-center">
+                                    <i class="fas fa-sticky-note text-green-500 mr-2"></i>
+                                    Notes
+                                </label>
+                                <textarea
+                                    name="notes"
+                                    rows="3"
+                                    placeholder="Any additional notes or observations"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 input-focus resize-none"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button
+                            type="submit"
+                            id="submitButton"
+                            class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mx-auto"
+                        >
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            <span>Submit Reading</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div class="mt-8 bg-white rounded-xl card-shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-chart-bar icon-gradient mr-2"></i>
+                    Quick Statistics
+                </h3>
+                <div id="quickStats" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <i class="fas fa-database text-blue-500 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Total Readings</p>
+                        <p class="text-xl font-bold text-blue-600" id="totalReadings">-</p>
+                    </div>
+                    <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                        <i class="fas fa-bolt text-yellow-500 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Avg Daily Energy</p>
+                        <p class="text-xl font-bold text-yellow-600" id="avgEnergy">- kWh</p>
+                    </div>
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <i class="fas fa-tint text-blue-500 text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">Avg Daily Water</p>
+                        <p class="text-xl font-bold text-blue-600" id="avgWater">- L</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.querySelector('input[name="date"]');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            
+            // Load quick stats
+            loadQuickStats();
+        });
+
+        async function loadQuickStats() {
+            try {
+                const response = await fetch('/api/statistics');
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('totalReadings').textContent = stats.totalReadings || 0;
+                    document.getElementById('avgEnergy').textContent = 
+                        stats.averageDailyEnergy ? stats.averageDailyEnergy.toFixed(2) + ' kWh' : '0 kWh';
+                    document.getElementById('avgWater').textContent = 
+                        stats.averageDailyWater ? stats.averageDailyWater.toFixed(2) + ' L' : '0 L';
+                }
+            } catch (error) {
+                console.error('Error loading quick stats:', error);
+            }
+        }
+
+        async function submitReading(event) {
+            event.preventDefault();
+            
+            const submitButton = document.getElementById('submitButton');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            
+            // Disable submit button and show loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                <span>Submitting...</span>
+            `;
+            
+            try {
+                const formData = new FormData(event.target);
+                const readingData = {
+                    date: formData.get('date'),
+                    energyMeter1: parseFloat(formData.get('energyMeter1')),
+                    energyMeter2: parseFloat(formData.get('energyMeter2')),
+                    waterMeter: parseFloat(formData.get('waterMeter')),
+                    location: formData.get('location') || '',
+                    notes: formData.get('notes') || ''
+                };
+                
+                const response = await fetch('/api/submit-reading', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(readingData),
+                });
+                
+                if (response.ok) {
+                    successMessage.classList.remove('hidden');
+                    event.target.reset();
+                    
+                    // Reset date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    document.querySelector('input[name="date"]').value = today;
+                    
+                    // Reload quick stats
+                    loadQuickStats();
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to submit reading');
+                }
+            } catch (error) {
+                console.error('Error submitting reading:', error);
+                errorMessage.classList.remove('hidden');
+                errorMessage.scrollIntoView({ behavior: 'smooth' });
+            } finally {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.innerHTML = `
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    <span>Submit Reading</span>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

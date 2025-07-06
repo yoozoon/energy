@@ -1,0 +1,29 @@
+{
+  "name": "utility-consumption-tracker",
+  "version": "1.0.0",
+  "description": "A web application for tracking energy and water consumption with real-time dashboard and analytics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "utility",
+    "energy",
+    "water",
+    "consumption",
+    "dashboard",
+    "node",
+    "express"
+  ],
+  "author": "Utility Tracker",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
